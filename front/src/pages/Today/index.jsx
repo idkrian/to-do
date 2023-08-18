@@ -1,13 +1,13 @@
 import React from "react";
-import { Checkbox } from "./ui/checkbox";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 
-const Description = () => {
+const Today = () => {
   return (
     <div className="col-span-2">
-      Today
-      <Button className="w-full bg-transparent">Add new Task</Button>
-      <div className="items-top flex space-x-2">
+      <span className="text-6xl font-bold ">Today</span>
+      <Button className="w-full">Add new Task</Button>
+      <div className="items-top flex space-x-2 rounded-md my-5 border-2 border-cyan-900 p-4">
         <Checkbox id="terms1" />
         <div className="grid gap-1.5 leading-none">
           <label
@@ -25,4 +25,4 @@ const Description = () => {
   );
 };
 
-export default Description;
+export default Today;

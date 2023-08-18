@@ -1,11 +1,6 @@
-import Menu from "@/components/Menu";
-import Description from "@/components/Description";
+import Menu from "@/pages/Menu";
+import Today from "@/pages/Today";
 
 export default function Home() {
-  return (
-    <main className="xl:container bg-red-600 mx-auto grid grid-cols-3 gap-2 ">
-      <Menu />
-      <Description />
-    </main>
-  );
+  return <Today />;
 }
