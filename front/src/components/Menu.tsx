@@ -1,4 +1,3 @@
-import React from "react";
 import MenuItem from "./Atoms/MenuItem";
 import { FaAnglesRight, FaList } from "react-icons/fa6";
 

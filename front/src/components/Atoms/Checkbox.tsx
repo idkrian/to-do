@@ -1,8 +1,8 @@
-import React from "react";
+import { FaAngleRight } from "react-icons/fa6";
 interface CheckboxProps {
   label: string;
 }
-import { FaAngleRight } from "react-icons/fa6";
+
 const Checkbox = ({ label }: CheckboxProps) => {
   return (
     <div className="flex items-center py-3 px-4 cursor-pointer border-b-2 border-[#ebebeb] align-middle relative">
