@@ -6,7 +6,6 @@ import Cube from "./Atoms/Cube";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -20,8 +19,12 @@ const Menu = () => {
       <h1 className="font-bold text-3xl">Menu</h1>
       <div>
         <h1 className="font-bold text-sm">TASKS</h1>
-        <MenuItem icon={<FaAnglesRight />} label={"Upcoming"} />
-        <MenuItem icon={<FaList />} label={"Today"} />
+        <a href="/upcoming">
+          <MenuItem icon={<FaAnglesRight />} label={"Upcoming"} />
+        </a>
+        <a href="/">
+          <MenuItem icon={<FaList />} label={"Today"} />
+        </a>
       </div>
       <Separator className="my-4" />
       <h1 className="font-bold text-sm">LISTS</h1>
