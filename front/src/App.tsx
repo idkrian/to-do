@@ -1,14 +1,14 @@
 import Menu from "./components/Menu";
 import Sidebar from "./components/Sidebar";
 import Today from "./components/Today";
-import { useAtom } from "jotai";
-import { sidebarOpenAtom } from "./components/storage/atoms";
+import Upcoming from "./components/Upcoming";
 
 function App() {
   return (
-    <div className="bg-[#fafafa] m-5 align-middle justify-center rounded-lg flex">
+    <div className="bg-[#fafafa] m-5 align-middle justify-center rounded-xl flex">
       <Menu />
-      <Today />
+      {/* <Today /> */}
+      <Upcoming />
       <Sidebar />
     </div>
   );

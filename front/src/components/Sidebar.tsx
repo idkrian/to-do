@@ -15,20 +15,28 @@ import {
 } from "../lib/ui/alert-dialog";
 import { useToast } from "../lib/ui/use-toast";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
+import axios from "axios";
 const Sidebar = () => {
   const { toast } = useToast();
   const [sidebarOpen] = useAtom(sidebarOpenAtom);
   const { register, handleSubmit } = useForm();
+
+  function postTask(data: any) {
+    console.log(data);
+    axios.post("http://localhost:5000/tasks", data);
+  }
+
   return (
     <div
       className={` px-4 py-2 ${
-        !sidebarOpen
+        !sidebarOpen.open
           ? "max-w-0 opacity-0 overflow-hidden mb-0"
           : "max-w-sm bg-[#f4f4f4] opacity-100 m-5"
       }  transition-all duration-500 rounded-xl`}
     >
       <h1 className="font-bold text-2xl">Task:</h1>
-      <form onSubmit={handleSubmit((data) => console.log(data))}>
+      <form onSubmit={handleSubmit((data) => postTask(data))}>
         <input
           className="w-full h-6 rounded-xl p-4 bg-transparent border-[#e4e6ea] border-2 border-solid my-2"
           type="text"
@@ -62,11 +70,6 @@ const Sidebar = () => {
             {...register("date")}
             className="py-1 px-3 rounded-lg border-[#e4e6ea] border-2 border-solid bg-transparent"
           />
-        </div>
-        <div className="items-center flex my-2">
-          <p className="mr-4">Tags:</p>
-          <div className="bg-lime-500 py-1 px-3 rounded-lg">Tag</div>
-          <div className="bg-lime-500 py-1 px-3 rounded-lg">Tag</div>
         </div>
         <h1 className="font-bold text-2xl">Subtasks:</h1>
         <div className="flex align-middle items-center rounded-md p-3 border-2 mt-4 mb-3">
@@ -108,6 +111,7 @@ const Sidebar = () => {
                 title: "Uh oh! Something went wrong.",
                 description: "There was a problem with your request.",
               });
+              postTask();
             }}
           >
             <p>Save Changes</p>
