@@ -15,9 +15,9 @@ import { Button } from "../lib/ui/button";
 
 const Menu = () => {
   return (
-    <div className="bg-[#f4f4f4] p-5 w-60 rounded-xl">
+    <div className="bg-[#ebebeb] p-5 w-60 rounded-xl m-5">
       <h1 className="font-bold text-3xl">Menu</h1>
-      <div>
+      <div className="mt-4">
         <h1 className="font-bold text-sm">TASKS</h1>
         <a href="/upcoming">
           <MenuItem icon={<FaAnglesRight />} label={"Upcoming"} />
@@ -45,9 +45,7 @@ const Menu = () => {
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <h1 htmlFor="list" className="text-right">
-                  List Name:
-                </h1>
+                <h1 className="text-right">List Name:</h1>
                 <input
                   id="list"
                   className="col-span-3 border-2 p-2 rounded-md"

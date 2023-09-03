@@ -32,7 +32,7 @@ const Sidebar = () => {
       className={` px-4 py-2 ${
         !sidebarOpen
           ? "max-w-0 opacity-0 overflow-hidden mb-0"
-          : "max-w-sm bg-[#f4f4f4] opacity-100 m-5"
+          : "max-w-sm bg-[#ebebeb] opacity-100 m-5"
       }  transition-all duration-500 rounded-xl`}
     >
       <h1 className="font-bold text-2xl">Task:</h1>
@@ -71,7 +71,7 @@ const Sidebar = () => {
             className="py-1 px-3 rounded-lg border-[#e4e6ea] border-2 border-solid bg-transparent"
           />
         </div>
-        <h1 className="font-bold text-2xl">Subtasks:</h1>
+        {/* <h1 className="font-bold text-2xl">Subtasks:</h1>
         <div className="flex align-middle items-center rounded-md p-3 border-2 mt-4 mb-3">
           <div className="pr-2">
             <FaPlus />
@@ -79,7 +79,7 @@ const Sidebar = () => {
           <p>Add new Subtask</p>
         </div>
 
-        <Checkbox label="Subtask" />
+        <Checkbox label="Subtask" /> */}
 
         <div className="flex justify-between">
           <AlertDialog>

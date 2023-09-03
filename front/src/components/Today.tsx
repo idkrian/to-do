@@ -37,7 +37,7 @@ const Today = () => {
     <div className="p-5 justify-between grow">
       <div>
         <div className="flex items-center">
-          <h1 className="font-bold text-5xl mr-4">Today</h1>
+          <h1 className="font-bold text-4xl mr-4">Today</h1>
           <div className="border-2 px-3 rounded-md">
             <h1 className="font-bold text-3xl">{todayTasks.length}</h1>
           </div>

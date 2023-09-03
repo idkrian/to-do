@@ -33,10 +33,14 @@ const Upcoming = () => {
   console.log(todayTasks);
 
   return (
-    <div className="p-5 justify-between grow">
-      <div>
-        <h1 className="font-bold text-5xl">Upcoming</h1>
-
+    <div className="p-5 justify-between grow h-full">
+      <div className="flex items-center">
+        <h1 className="font-bold text-4xl mr-4">Upcoming</h1>
+        <div className="border-2 px-3 rounded-md">
+          <h1 className="font-bold text-3xl">{thisWeekTasks.length}</h1>
+        </div>
+      </div>
+      <div className="pt-10">
         <TaskContainer title={"Today"} tasks={todayTasks} />
 
         <div className="flex w-full">

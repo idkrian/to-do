@@ -15,7 +15,7 @@ const router = createBrowserRouter([
 ]);
 function App() {
   return (
-    <div className="bg-[#fafafa] m-5 align-middle justify-center rounded-xl flex">
+    <div className="bg-[#fafafa] align-middle justify-center rounded-xl flex h-5/6 w-3/4 mx-auto">
       <Menu />
       <RouterProvider router={router} />
       <Sidebar />
