@@ -6,7 +6,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import format from "date-fns/format";
 import { addDays } from "date-fns";
-interface TaskProps {
+
+export interface TaskProps {
   _id: string;
   title: string;
   description: string;
@@ -43,7 +44,7 @@ const Today = () => {
         </div>
         <div
           className="flex align-middle items-center rounded-md p-3 border-2 mt-8 mb-3 cursor-pointer"
-          onClick={() => setSidebarOpen({ item: {}, open: !sidebarOpen.open })}
+          onClick={() => setSidebarOpen(!sidebarOpen)}
         >
           <div className="pr-2">
             <FaPlus />
@@ -52,11 +53,7 @@ const Today = () => {
         </div>
         <div>
           {todayTasks.map((task) => (
-            <div
-              onClick={() =>
-                setSidebarOpen({ item: task, open: !sidebarOpen.open })
-              }
-            >
+            <div onClick={() => setSidebarOpen(!sidebarOpen)}>
               <Checkbox label={task.title} key={task._id} />
             </div>
           ))}

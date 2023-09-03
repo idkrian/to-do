@@ -15,14 +15,14 @@ import {
 } from "../lib/ui/alert-dialog";
 import { useToast } from "../lib/ui/use-toast";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 import axios from "axios";
+
 const Sidebar = () => {
   const { toast } = useToast();
   const [sidebarOpen] = useAtom(sidebarOpenAtom);
   const { register, handleSubmit } = useForm();
 
-  function postTask(data: any) {
+  function postTask(data: unknown) {
     console.log(data);
     axios.post("http://localhost:5000/tasks", data);
   }
@@ -30,7 +30,7 @@ const Sidebar = () => {
   return (
     <div
       className={` px-4 py-2 ${
-        !sidebarOpen.open
+        !sidebarOpen
           ? "max-w-0 opacity-0 overflow-hidden mb-0"
           : "max-w-sm bg-[#f4f4f4] opacity-100 m-5"
       }  transition-all duration-500 rounded-xl`}
@@ -111,7 +111,6 @@ const Sidebar = () => {
                 title: "Uh oh! Something went wrong.",
                 description: "There was a problem with your request.",
               });
-              postTask();
             }}
           >
             <p>Save Changes</p>
