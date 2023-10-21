@@ -1,3 +1,4 @@
+import ListTracks from "./components/ListTracks";
 import Menu from "./components/Menu";
 import Sidebar from "./components/Sidebar";
 import Today from "./components/Today";
@@ -11,6 +12,10 @@ const router = createBrowserRouter([
   {
     path: "/upcoming",
     element: <Upcoming />,
+  },
+  {
+    path: "/list/:listName",
+    element: <ListTracks />,
   },
 ]);
 function App() {

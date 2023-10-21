@@ -30,7 +30,6 @@ const Upcoming = () => {
   useEffect(() => {
     getAllTasks();
   }, []);
-  console.log(todayTasks);
 
   return (
     <div className="p-5 justify-between grow h-full">

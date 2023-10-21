@@ -1,24 +1,24 @@
-import { FaPlus } from "react-icons/fa6";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { TaskProps } from "../helpers/interfaces";
+import { getAllTasks } from "../helpers/api";
 import Checkbox from "./Atoms/Checkbox";
+import { FaPlus } from "react-icons/fa6";
 import { useAtom } from "jotai";
-import { sidebarOpenAtom } from "./storage/atoms";
-import { getAllTasks } from "../helpers/api.js";
-import { useEffect, useState } from "react";
-import format from "date-fns/format";
-import { addDays } from "date-fns";
-import { TaskProps } from "../helpers/interfaces.js";
+import { sidebarDataAtom, sidebarOpenAtom } from "./storage/atoms";
 
-const Today = () => {
+const ListTracks = () => {
+  const { listName } = useParams();
   const [sidebarOpen, setSidebarOpen] = useAtom(sidebarOpenAtom);
+  const [sidebarData, setSidebarData] = useAtom(sidebarDataAtom);
+
   const [tasks, setTasks] = useState<TaskProps[]>([]);
-  const today = format(new Date(), "dd/MM/yyyy");
-  const todayTasks = tasks.filter(
-    (e) => format(addDays(new Date(e.date), 1), "dd/MM/yyyy") === today
-  );
 
   const getTasks = async () => {
     const tasksData = await getAllTasks();
-    setTasks(tasksData);
+    const listData = tasksData.filter((e) => e.list === listName);
+
+    setTasks(listData);
   };
   useEffect(() => {
     getTasks();
@@ -30,7 +30,7 @@ const Today = () => {
         <div className="flex items-center">
           <h1 className="font-bold text-4xl mr-4">Today</h1>
           <div className="border-2 px-3 rounded-md">
-            <h1 className="font-bold text-3xl">{todayTasks.length}</h1>
+            <h1 className="font-bold text-3xl">{tasks.length}</h1>
           </div>
         </div>
         <div
@@ -43,11 +43,13 @@ const Today = () => {
           <p>Add new task</p>
         </div>
         <div>
-          {todayTasks.map((task) => (
+          {tasks.map((task) => (
             <div
               onClick={() => {
-                setSidebarOpen(!sidebarOpen);
-                console.log(task);
+                sidebarOpen === false ? setSidebarOpen(!sidebarOpen) : "";
+                setSidebarData(task);
+                // setSidebarOpen(!sidebarOpen);
+                // console.log(sidebarOpen);
               }}
               key={task._id}
             >
@@ -60,4 +62,4 @@ const Today = () => {
   );
 };
 
-export default Today;
+export default ListTracks;

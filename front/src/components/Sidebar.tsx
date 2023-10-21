@@ -1,7 +1,5 @@
 import { useAtom } from "jotai";
-import { sidebarOpenAtom } from "./storage/atoms";
-import { FaPlus } from "react-icons/fa6";
-import Checkbox from "./Atoms/Checkbox";
+import { sidebarDataAtom, sidebarOpenAtom } from "./storage/atoms";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,16 +12,26 @@ import {
   AlertDialogTrigger,
 } from "../lib/ui/alert-dialog";
 import { useToast } from "../lib/ui/use-toast";
-import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { addDays, format } from "date-fns";
 
 const Sidebar = () => {
   const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    list: "",
+    date: new Date(),
+  });
   const [sidebarOpen] = useAtom(sidebarOpenAtom);
-  const { register, handleSubmit } = useForm();
+  const [sidebarData] = useAtom(sidebarDataAtom);
+
+  useEffect(() => {
+    setFormData(sidebarData);
+  }, [sidebarData]);
 
   function postTask(data: unknown) {
-    console.log(data);
     axios.post("http://localhost:5000/tasks", data);
   }
 
@@ -36,26 +44,32 @@ const Sidebar = () => {
       }  transition-all duration-500 rounded-xl`}
     >
       <h1 className="font-bold text-2xl">Task:</h1>
-      <form onSubmit={handleSubmit((data) => postTask(data))}>
+      <form onSubmit={() => postTask(formData)}>
         <input
           className="w-full h-6 rounded-xl p-4 bg-transparent border-[#e4e6ea] border-2 border-solid my-2"
           type="text"
-          id=""
           placeholder="Title"
-          {...register("title")}
+          value={formData.title}
+          onChange={(e) => {
+            setFormData({ ...formData, title: e.target.value });
+          }}
         />
         <input
           className="w-full h-32 rounded-xl p-4 bg-transparent border-[#e4e6ea] border-2 border-solid my-2"
           type="text"
-          id=""
+          value={formData.description}
           placeholder="Description"
-          {...register("description")}
+          onChange={(e) => {
+            setFormData({ ...formData, description: e.target.value });
+          }}
         />
         <div className="items-center flex my-2">
           <p className="mr-4">List:</p>
           <select
-            id=""
-            {...register("list")}
+            value={formData.list}
+            onChange={(e) => {
+              setFormData({ ...formData, list: e.target.value });
+            }}
             className="py-1 px-3 rounded-lg border-[#e4e6ea] border-2 border-solid bg-transparent"
           >
             <option value="personal">Personal</option>
@@ -66,20 +80,14 @@ const Sidebar = () => {
           <p className="mr-4">Due date:</p>
           <input
             type="date"
-            id=""
-            {...register("date")}
+            value={format(new Date(formData.date), "yyyy-MM-dd")}
+            onChange={(e) => {
+              const handleDate = addDays(new Date(e.target.value), 1);
+              setFormData({ ...formData, date: handleDate });
+            }}
             className="py-1 px-3 rounded-lg border-[#e4e6ea] border-2 border-solid bg-transparent"
           />
         </div>
-        {/* <h1 className="font-bold text-2xl">Subtasks:</h1>
-        <div className="flex align-middle items-center rounded-md p-3 border-2 mt-4 mb-3">
-          <div className="pr-2">
-            <FaPlus />
-          </div>
-          <p>Add new Subtask</p>
-        </div>
-
-        <Checkbox label="Subtask" /> */}
 
         <div className="flex justify-between">
           <AlertDialog>
