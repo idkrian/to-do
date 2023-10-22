@@ -1,8 +1,8 @@
 import { useAtom } from "jotai";
 import { sidebarOpenAtom } from "../storage/atoms";
 import { FaPlus } from "react-icons/fa6";
-import Checkbox from "./Checkbox";
-import { TaskProps } from "../Today";
+import { TaskProps } from "../../helpers/interfaces";
+import TaskItem from "./TaskItem";
 
 interface TaskContainerProps {
   title: string;
@@ -25,9 +25,7 @@ const TaskContainer = ({ title, tasks, style }: TaskContainerProps) => {
         <p>Add new task</p>
       </div>
       {tasks.map((task) => (
-        <div onClick={() => setSidebarOpen(!sidebarOpen)} key={task._id}>
-          <Checkbox label={task.title} key={task._id} />
-        </div>
+        <TaskItem task={task} key={task._id} />
       ))}
     </div>
   );

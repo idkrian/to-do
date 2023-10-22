@@ -1,19 +1,18 @@
 import { FaPlus } from "react-icons/fa6";
-import Checkbox from "./Atoms/Checkbox";
 import { useAtom } from "jotai";
 import { sidebarOpenAtom } from "./storage/atoms";
 import { getAllTasks } from "../helpers/api.js";
 import { useEffect, useState } from "react";
 import format from "date-fns/format";
-import { addDays } from "date-fns";
 import { TaskProps } from "../helpers/interfaces.js";
+import TaskItem from "./Atoms/TaskItem.js";
 
 const Today = () => {
   const [sidebarOpen, setSidebarOpen] = useAtom(sidebarOpenAtom);
   const [tasks, setTasks] = useState<TaskProps[]>([]);
   const today = format(new Date(), "dd/MM/yyyy");
   const todayTasks = tasks.filter(
-    (e) => format(addDays(new Date(e.date), 1), "dd/MM/yyyy") === today
+    (e) => format(new Date(e.date), "dd/MM/yyyy") === today
   );
 
   const getTasks = async () => {
@@ -44,15 +43,7 @@ const Today = () => {
         </div>
         <div>
           {todayTasks.map((task) => (
-            <div
-              onClick={() => {
-                setSidebarOpen(!sidebarOpen);
-                console.log(task);
-              }}
-              key={task._id}
-            >
-              <Checkbox label={task.title} key={task._id} />
-            </div>
+            <TaskItem task={task} key={task._id} />
           ))}
         </div>
       </div>

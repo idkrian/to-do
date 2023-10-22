@@ -1,4 +1,4 @@
-import ListTracks from "./components/ListTracks";
+import ListTasks from "./components/ListTasks";
 import Menu from "./components/Menu";
 import Sidebar from "./components/Sidebar";
 import Today from "./components/Today";
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/list/:listName",
-    element: <ListTracks />,
+    element: <ListTasks />,
   },
 ]);
 function App() {

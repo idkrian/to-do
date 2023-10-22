@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TaskProps } from "../helpers/interfaces";
 import { getAllTasks } from "../helpers/api";
-import Checkbox from "./Atoms/Checkbox";
 import { FaPlus } from "react-icons/fa6";
 import { useAtom } from "jotai";
 import { sidebarDataAtom, sidebarOpenAtom } from "./storage/atoms";
+import TaskItem from "./Atoms/TaskItem";
 
 const ListTracks = () => {
   const { listName } = useParams();
   const [sidebarOpen, setSidebarOpen] = useAtom(sidebarOpenAtom);
-  const [sidebarData, setSidebarData] = useAtom(sidebarDataAtom);
+  const [sidebarData] = useAtom(sidebarDataAtom);
 
   const [tasks, setTasks] = useState<TaskProps[]>([]);
 
@@ -25,7 +25,6 @@ const ListTracks = () => {
   useEffect(() => {
     getTasks();
   }, [sidebarData]);
-  console.log(tasks);
 
   return (
     <div className="p-5 justify-between grow">
@@ -47,15 +46,7 @@ const ListTracks = () => {
         </div>
         <div>
           {tasks.map((task) => (
-            <div
-              onClick={() => {
-                sidebarOpen === false ? setSidebarOpen(!sidebarOpen) : "";
-                setSidebarData(task);
-              }}
-              key={task._id}
-            >
-              <Checkbox label={task.title} key={task._id} />
-            </div>
+            <TaskItem task={task} key={task._id} />
           ))}
         </div>
       </div>

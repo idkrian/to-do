@@ -15,7 +15,7 @@ const Upcoming = () => {
   const today = format(new Date(), "dd/MM/yyyy");
   const tomorrow = format(addDays(new Date(), 1), "dd/MM/yyyy");
   const todayTasks = tasks.filter(
-    (e) => format(addDays(new Date(e.date), 1), "dd/MM/yyyy") === today
+    (e) => format(new Date(e.date), "dd/MM/yyyy") === today
   );
   const tomorrowTasks = tasks.filter(
     (e) => format(addDays(new Date(e.date), 1), "dd/MM/yyyy") === tomorrow
