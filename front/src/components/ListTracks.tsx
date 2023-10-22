@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TaskProps } from "../helpers/interfaces";
 import { getAllTasks } from "../helpers/api";
@@ -10,7 +10,7 @@ import { sidebarDataAtom, sidebarOpenAtom } from "./storage/atoms";
 const ListTracks = () => {
   const { listName } = useParams();
   const [sidebarOpen, setSidebarOpen] = useAtom(sidebarOpenAtom);
-  const [, setSidebarData] = useAtom(sidebarDataAtom);
+  const [sidebarData, setSidebarData] = useAtom(sidebarDataAtom);
 
   const [tasks, setTasks] = useState<TaskProps[]>([]);
 
@@ -24,7 +24,8 @@ const ListTracks = () => {
   };
   useEffect(() => {
     getTasks();
-  }, []);
+  }, [sidebarData]);
+  console.log(tasks);
 
   return (
     <div className="p-5 justify-between grow">

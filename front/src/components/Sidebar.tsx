@@ -1,22 +1,12 @@
 import { useAtom } from "jotai";
 import { sidebarDataAtom, sidebarOpenAtom } from "./storage/atoms";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "../lib/ui/alert-dialog";
 import { useToast } from "../lib/ui/use-toast";
 import { FormEvent, useEffect, useState } from "react";
 import { addDays, format } from "date-fns";
 import { createTask, deleteTask } from "../helpers/api";
 import { TaskProps } from "../helpers/interfaces";
 import { IoCloseSharp } from "react-icons/io5";
+import AlertModal from "./Atoms/AlertModal";
 
 const Sidebar = () => {
   const { toast } = useToast();
@@ -36,10 +26,10 @@ const Sidebar = () => {
 
   const postTask = async (e: FormEvent<HTMLFormElement>, data: TaskProps) => {
     e.preventDefault();
-    delete data._id;
     await createTask(data);
     setSidebarOpen(!sidebarOpen);
   };
+
   const closeSidebar = () => {
     setSidebarOpen(!sidebarOpen);
     setSidebarData({
@@ -50,6 +40,12 @@ const Sidebar = () => {
       date: new Date(),
     });
   };
+
+  const handleDeleteTask = async (id: string) => {
+    await deleteTask(id);
+    closeSidebar();
+  };
+
   return (
     <div
       className={` px-4 py-2 ${
@@ -112,40 +108,15 @@ const Sidebar = () => {
         </div>
 
         <div className="flex justify-between">
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <div className="flex font-semibold align-middle items-center rounded-xl p-3 border-2 mt-8 mb-3 cursor-pointer">
-                <p>Delete Task</p>
-              </div>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => {
-                    deleteTask(sidebarData._id);
-                  }}
-                >
-                  Continue
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <AlertModal data={sidebarData} handleDeleteTask={handleDeleteTask} />
           <button
             type="submit"
             className="flex font-semibold align-middle items-center rounded-xl p-3 border-2 mt-8 mb-3 bg-[#ffd43b] cursor-pointer"
             onClick={() => {
               toast({
                 variant: "destructive",
-                title: "Uh oh! Something went wrong.",
-                description: "There was a problem with your request.",
+                title: "The task was deleted!",
+                description: `The task "${sidebarData.title}" has been successfully deleted.`,
               });
             }}
           >

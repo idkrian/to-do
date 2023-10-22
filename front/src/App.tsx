@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar";
 import Today from "./components/Today";
 import Upcoming from "./components/Upcoming";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Toaster } from "./lib/ui/toaster";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -24,6 +25,7 @@ function App() {
       <Menu />
       <RouterProvider router={router} />
       <Sidebar />
+      <Toaster />
     </div>
   );
 }
