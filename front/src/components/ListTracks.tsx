@@ -10,13 +10,15 @@ import { sidebarDataAtom, sidebarOpenAtom } from "./storage/atoms";
 const ListTracks = () => {
   const { listName } = useParams();
   const [sidebarOpen, setSidebarOpen] = useAtom(sidebarOpenAtom);
-  const [sidebarData, setSidebarData] = useAtom(sidebarDataAtom);
+  const [, setSidebarData] = useAtom(sidebarDataAtom);
 
   const [tasks, setTasks] = useState<TaskProps[]>([]);
 
   const getTasks = async () => {
     const tasksData = await getAllTasks();
-    const listData = tasksData.filter((e) => e.list === listName);
+    const listData = tasksData.filter(
+      (e: { list: string | undefined }) => e.list === listName
+    );
 
     setTasks(listData);
   };
@@ -48,8 +50,6 @@ const ListTracks = () => {
               onClick={() => {
                 sidebarOpen === false ? setSidebarOpen(!sidebarOpen) : "";
                 setSidebarData(task);
-                // setSidebarOpen(!sidebarOpen);
-                // console.log(sidebarOpen);
               }}
               key={task._id}
             >

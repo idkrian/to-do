@@ -12,28 +12,30 @@ import {
   AlertDialogTrigger,
 } from "../lib/ui/alert-dialog";
 import { useToast } from "../lib/ui/use-toast";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { addDays, format } from "date-fns";
+import { createTask, deleteTask } from "../helpers/api";
+import { TaskProps } from "../helpers/interfaces";
 
 const Sidebar = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
+    _id: "",
     title: "",
     description: "",
     list: "",
     date: new Date(),
   });
-  const [sidebarOpen] = useAtom(sidebarOpenAtom);
+  const [, sidebarOpen] = useAtom(sidebarOpenAtom);
   const [sidebarData] = useAtom(sidebarDataAtom);
 
   useEffect(() => {
     setFormData(sidebarData);
   }, [sidebarData]);
 
-  function postTask(data: unknown) {
-    axios.post("http://localhost:5000/tasks", data);
-  }
+  const postTask = async (data: TaskProps) => {
+    await createTask(data);
+  };
 
   return (
     <div
@@ -106,7 +108,13 @@ const Sidebar = () => {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
+                <AlertDialogAction
+                  onClick={() => {
+                    deleteTask(sidebarData._id);
+                  }}
+                >
+                  Continue
+                </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
