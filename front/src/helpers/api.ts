@@ -13,7 +13,7 @@ export const getAllTasks = async () => {
 
 export const createTask = async (data: TaskProps) => {
   try {
-    const response = await axios.post(`${baseURL}/tasks`, { data });
+    const response = await axios.post(`${baseURL}/tasks`, { ...data });
     return response;
   } catch (error) {
     console.log(error);

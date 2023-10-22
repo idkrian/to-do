@@ -12,10 +12,11 @@ import {
   AlertDialogTrigger,
 } from "../lib/ui/alert-dialog";
 import { useToast } from "../lib/ui/use-toast";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { addDays, format } from "date-fns";
 import { createTask, deleteTask } from "../helpers/api";
 import { TaskProps } from "../helpers/interfaces";
+import { IoCloseSharp } from "react-icons/io5";
 
 const Sidebar = () => {
   const { toast } = useToast();
@@ -26,17 +27,29 @@ const Sidebar = () => {
     list: "",
     date: new Date(),
   });
-  const [, sidebarOpen] = useAtom(sidebarOpenAtom);
-  const [sidebarData] = useAtom(sidebarDataAtom);
+  const [sidebarOpen, setSidebarOpen] = useAtom(sidebarOpenAtom);
+  const [sidebarData, setSidebarData] = useAtom(sidebarDataAtom);
 
   useEffect(() => {
     setFormData(sidebarData);
-  }, [sidebarData]);
+  }, [sidebarData, sidebarOpen]);
 
-  const postTask = async (data: TaskProps) => {
+  const postTask = async (e: FormEvent<HTMLFormElement>, data: TaskProps) => {
+    e.preventDefault();
+    delete data._id;
     await createTask(data);
+    setSidebarOpen(!sidebarOpen);
   };
-
+  const closeSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+    setSidebarData({
+      _id: "",
+      title: "",
+      description: "",
+      list: "",
+      date: new Date(),
+    });
+  };
   return (
     <div
       className={` px-4 py-2 ${
@@ -45,8 +58,15 @@ const Sidebar = () => {
           : "max-w-sm bg-[#ebebeb] opacity-100 m-5"
       }  transition-all duration-500 rounded-xl`}
     >
-      <h1 className="font-bold text-2xl">Task:</h1>
-      <form onSubmit={() => postTask(formData)}>
+      <div className="flex justify-between items-center">
+        <h1 className="font-bold text-2xl">Task:</h1>
+        <IoCloseSharp
+          size={25}
+          className="cursor-pointer"
+          onClick={() => closeSidebar()}
+        />
+      </div>
+      <form onSubmit={(e) => postTask(e, formData)}>
         <input
           className="w-full h-6 rounded-xl p-4 bg-transparent border-[#e4e6ea] border-2 border-solid my-2"
           type="text"
