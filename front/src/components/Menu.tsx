@@ -2,7 +2,6 @@ import MenuItem from "./Atoms/MenuItem";
 import { FaAnglesRight, FaList, FaPlus } from "react-icons/fa6";
 import { Separator } from "../lib/ui/separator";
 import { getAllTasks } from "../helpers/api.js";
-import ListItem from "./Atoms/ListItem.js";
 
 import {
   Dialog,
@@ -15,10 +14,16 @@ import {
 import { Button } from "../lib/ui/button";
 import { useEffect, useState } from "react";
 import { TaskProps } from "../helpers/interfaces.js";
+import { format, isThisWeek } from "date-fns";
+import Cube from "./Atoms/Cube.js";
 
 const Menu = () => {
   const [tasks, setTasks] = useState<TaskProps[]>([]);
-
+  const today = format(new Date(), "dd/MM/yyyy");
+  const todayTasks = tasks.filter(
+    (e) => format(new Date(e.date), "dd/MM/yyyy") === today
+  );
+  const thisWeekTasks = tasks.filter((e) => isThisWeek(new Date(e.date)));
   const getTasks = async () => {
     const tasksData = await getAllTasks();
     setTasks(tasksData);
@@ -47,6 +52,7 @@ const Menu = () => {
   //   const randomValue = getRandomValue(randomOptions);
   //   return { label: item, color: randomValue };
   // });
+  console.log(listItems);
 
   return (
     <div className="bg-[#ebebeb] p-5 w-60 rounded-xl m-5">
@@ -54,24 +60,29 @@ const Menu = () => {
       <div className="mt-4">
         <h1 className="font-bold text-sm">TASKS</h1>
         <a href="/upcoming">
-          <MenuItem icon={<FaAnglesRight />} label={"Upcoming"} />
+          <MenuItem
+            icon={<FaAnglesRight />}
+            label={"Upcoming"}
+            itemsLength={thisWeekTasks.length}
+          />
         </a>
         <a href="/">
-          <MenuItem icon={<FaList />} label={"Today"} />
+          <MenuItem
+            icon={<FaList />}
+            label={"Today"}
+            itemsLength={todayTasks.length}
+          />
         </a>
       </div>
       <Separator className="my-4" />
       <h1 className="font-bold text-sm ">LISTS</h1>
       <div>
-        {/* <a href="">
-          <ListItem data={tasks} cubeColor={"lime-500"} label={"Work"} />
-        </a> */}
         {listItems.map((item) => (
           <a href={`/list/${item}`} key={item}>
-            <ListItem
-              data={tasks}
-              cubeColor={"red-500"}
+            <MenuItem
+              icon={<Cube color={"red-500"} />}
               label={item.charAt(0).toUpperCase() + item.slice(1)}
+              itemsLength={tasks.filter((i) => i.list === item).length}
             />
           </a>
         ))}
