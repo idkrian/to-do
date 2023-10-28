@@ -1,9 +1,13 @@
 import { useAtom } from "jotai";
-import { sidebarDataAtom, sidebarOpenAtom } from "./storage/atoms";
+import {
+  isUpdateAtom,
+  sidebarDataAtom,
+  sidebarOpenAtom,
+} from "./storage/atoms";
 import { useToast } from "../lib/ui/use-toast";
 import { FormEvent, useEffect, useState } from "react";
 import { addDays, format } from "date-fns";
-import { createTask, deleteTask } from "../helpers/api";
+import { createTask, deleteTask, updateTask } from "../helpers/api";
 import { TaskProps } from "../helpers/interfaces";
 import { IoCloseSharp } from "react-icons/io5";
 import AlertModal from "./Atoms/AlertModal";
@@ -19,14 +23,19 @@ const Sidebar = () => {
   });
   const [sidebarOpen, setSidebarOpen] = useAtom(sidebarOpenAtom);
   const [sidebarData, setSidebarData] = useAtom(sidebarDataAtom);
+  const [isUpdate] = useAtom(isUpdateAtom);
 
   useEffect(() => {
     setFormData(sidebarData);
   }, [sidebarData, sidebarOpen]);
 
-  const postTask = async (e: FormEvent<HTMLFormElement>, data: TaskProps) => {
+  const handleTask = async (e: FormEvent<HTMLFormElement>, data: TaskProps) => {
     e.preventDefault();
-    await createTask(data);
+    if (isUpdate) {
+      await updateTask(data._id, data);
+    } else {
+      await createTask(data);
+    }
     setSidebarOpen(!sidebarOpen);
   };
 
@@ -62,7 +71,7 @@ const Sidebar = () => {
           onClick={() => closeSidebar()}
         />
       </div>
-      <form onSubmit={(e) => postTask(e, formData)}>
+      <form onSubmit={(e) => handleTask(e, formData)}>
         <input
           className="w-full h-6 rounded-xl p-4 bg-transparent border-[#e4e6ea] border-2 border-solid my-2"
           type="text"
@@ -114,9 +123,10 @@ const Sidebar = () => {
             className="flex font-semibold align-middle items-center rounded-xl p-3 border-2 mt-8 mb-3 bg-[#ffd43b] cursor-pointer"
             onClick={() => {
               toast({
-                variant: "destructive",
-                title: "The task was deleted!",
-                description: `The task "${sidebarData.title}" has been successfully deleted.`,
+                variant: "default",
+                title: isUpdate
+                  ? "The task was edited!"
+                  : "The task was created!",
               });
             }}
           >

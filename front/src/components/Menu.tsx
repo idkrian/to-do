@@ -52,7 +52,6 @@ const Menu = () => {
   //   const randomValue = getRandomValue(randomOptions);
   //   return { label: item, color: randomValue };
   // });
-  console.log(listItems);
 
   return (
     <div className="bg-[#ebebeb] p-5 w-60 rounded-xl m-5">

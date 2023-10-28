@@ -9,7 +9,6 @@ class TaskController {
   static async getOne(req, res) {
     try {
       const { id } = req.params;
-      console.log(id);
       const task = await Task.findById(id);
       res.status(201).json({
         task,
@@ -23,6 +22,26 @@ class TaskController {
       const allTasks = await Task.find();
       res.status(201).json({
         allTasks,
+      });
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+  }
+  static async edit(req, res) {
+    try {
+      const { id } = req.params;
+      const { title, description, done, date, list } = req.body;
+
+      const task = {
+        title,
+        description,
+        done,
+        date,
+        list,
+      };
+      const editedTask = await Task.findByIdAndUpdate(id, task);
+      res.status(201).json({
+        editedTask,
       });
     } catch (error) {
       res.status(500).json({ message: error });

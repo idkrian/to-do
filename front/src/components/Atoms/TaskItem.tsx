@@ -1,5 +1,9 @@
 import { useAtom } from "jotai";
-import { sidebarDataAtom, sidebarOpenAtom } from "../storage/atoms";
+import {
+  isUpdateAtom,
+  sidebarDataAtom,
+  sidebarOpenAtom,
+} from "../storage/atoms";
 import Checkbox from "./Checkbox";
 
 interface TaskItemProps {
@@ -15,12 +19,14 @@ interface TaskItemProps {
 const TaskItem = ({ task }: TaskItemProps) => {
   const [sidebarOpen, setSidebarOpen] = useAtom(sidebarOpenAtom);
   const [, setSidebarData] = useAtom(sidebarDataAtom);
+  const [, setIsUpdade] = useAtom(isUpdateAtom);
 
   return (
     <div
       onClick={() => {
         sidebarOpen === false ? setSidebarOpen(!sidebarOpen) : "";
         setSidebarData(task);
+        setIsUpdade(true);
       }}
       key={task._id}
     >

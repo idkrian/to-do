@@ -28,3 +28,11 @@ export const deleteTask = async (id: string) => {
     console.log(error);
   }
 };
+export const updateTask = async (id: string, data: TaskProps) => {
+  try {
+    const response = await axios.put(`${baseURL}/tasks/${id}`, { ...data });
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
