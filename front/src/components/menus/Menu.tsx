@@ -1,7 +1,7 @@
-import MenuItem from "./Atoms/MenuItem";
+import MenuItem from "../Atoms/MenuItem.js";
 import { FaAnglesRight, FaList, FaPlus } from "react-icons/fa6";
-import { Separator } from "../lib/ui/separator";
-import { getAllTasks } from "../helpers/api.js";
+import { Separator } from "../../lib/ui/separator.js";
+import { getAllTasks } from "../../helpers/api.js";
 
 import {
   Dialog,
@@ -10,12 +10,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../lib/ui/dialog";
-import { Button } from "../lib/ui/button";
+} from "../../lib/ui/dialog.js";
+import { Button } from "../../lib/ui/button.js";
 import { useEffect, useState } from "react";
-import { TaskProps } from "../helpers/interfaces.js";
+import { TaskProps } from "../../helpers/interfaces.js";
 import { format, isThisWeek } from "date-fns";
-import Cube from "./Atoms/Cube.js";
+import Cube from "../Atoms/Cube.js";
 
 const Menu = () => {
   const [tasks, setTasks] = useState<TaskProps[]>([]);

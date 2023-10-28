@@ -1,8 +1,8 @@
-import ListTasks from "./components/ListTasks";
-import Menu from "./components/Menu";
-import Sidebar from "./components/Sidebar";
-import Today from "./components/Today";
-import Upcoming from "./components/Upcoming";
+import ListTasks from "./components/pages/ListTasks";
+import Menu from "./components/menus/Menu";
+import Sidebar from "./components/menus/Sidebar";
+import Today from "./components/pages/Today";
+import Upcoming from "./components/pages/Upcoming";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Toaster } from "./lib/ui/toaster";
 const router = createBrowserRouter([

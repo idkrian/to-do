@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { addDays, format, isThisWeek } from "date-fns";
-import TaskContainer from "./Atoms/TaskContainer";
+import TaskContainer from "../Atoms/TaskContainer";
 interface TaskProps {
   _id: string;
   title: string;

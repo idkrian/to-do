@@ -1,30 +1,27 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { TaskProps } from "../helpers/interfaces";
-import { getAllTasks } from "../helpers/api";
 import { FaPlus } from "react-icons/fa6";
 import { useAtom } from "jotai";
-import { sidebarDataAtom, sidebarOpenAtom } from "./storage/atoms";
-import TaskItem from "./Atoms/TaskItem";
+import { sidebarOpenAtom } from "../storage/atoms.js";
+import { getAllTasks } from "../../helpers/api.js";
+import { useEffect, useState } from "react";
+import format from "date-fns/format";
+import { TaskProps } from "../../helpers/interfaces.js";
+import TaskItem from "../Atoms/TaskItem.js";
 
-const ListTracks = () => {
-  const { listName } = useParams();
+const Today = () => {
   const [sidebarOpen, setSidebarOpen] = useAtom(sidebarOpenAtom);
-  const [sidebarData] = useAtom(sidebarDataAtom);
-
   const [tasks, setTasks] = useState<TaskProps[]>([]);
+  const today = format(new Date(), "dd/MM/yyyy");
+  const todayTasks = tasks.filter(
+    (e) => format(new Date(e.date), "dd/MM/yyyy") === today
+  );
 
   const getTasks = async () => {
     const tasksData = await getAllTasks();
-    const listData = tasksData.filter(
-      (e: { list: string | undefined }) => e.list === listName
-    );
-
-    setTasks(listData);
+    setTasks(tasksData);
   };
   useEffect(() => {
     getTasks();
-  }, [sidebarData]);
+  }, []);
 
   return (
     <div className="p-5 justify-between grow">
@@ -32,7 +29,7 @@ const ListTracks = () => {
         <div className="flex items-center">
           <h1 className="font-bold text-4xl mr-4">Today</h1>
           <div className="border-2 px-3 rounded-md">
-            <h1 className="font-bold text-3xl">{tasks.length}</h1>
+            <h1 className="font-bold text-3xl">{todayTasks.length}</h1>
           </div>
         </div>
         <div
@@ -45,7 +42,7 @@ const ListTracks = () => {
           <p>Add new task</p>
         </div>
         <div>
-          {tasks.map((task) => (
+          {todayTasks.map((task) => (
             <TaskItem task={task} key={task._id} />
           ))}
         </div>
@@ -54,4 +51,4 @@ const ListTracks = () => {
   );
 };
 
-export default ListTracks;
+export default Today;

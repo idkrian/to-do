@@ -3,14 +3,14 @@ import {
   isUpdateAtom,
   sidebarDataAtom,
   sidebarOpenAtom,
-} from "./storage/atoms";
-import { useToast } from "../lib/ui/use-toast";
+} from "../storage/atoms";
+import { useToast } from "../../lib/ui/use-toast";
 import { FormEvent, useEffect, useState } from "react";
 import { addDays, format } from "date-fns";
-import { createTask, deleteTask, updateTask } from "../helpers/api";
-import { TaskProps } from "../helpers/interfaces";
+import { createTask, deleteTask, updateTask } from "../../helpers/api";
+import { TaskProps } from "../../helpers/interfaces";
 import { IoCloseSharp } from "react-icons/io5";
-import AlertModal from "./Atoms/AlertModal";
+import AlertModal from "../Atoms/AlertModal";
 
 const Sidebar = () => {
   const { toast } = useToast();
