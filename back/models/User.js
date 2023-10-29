@@ -1,8 +1,8 @@
 const mongoose = require("../db/conn");
 const { Schema } = mongoose;
 
-const Auth = mongoose.model(
-  "Auth",
+const User = mongoose.model(
+  "User",
   new Schema(
     {
       email: {
@@ -19,9 +19,10 @@ const Auth = mongoose.model(
       date: {
         type: Date,
       },
+      tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
     },
     { timestamps: true }
   )
 );
 
-module.exports = Auth;
+module.exports = User;

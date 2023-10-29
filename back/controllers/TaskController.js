@@ -1,10 +1,24 @@
 const Task = require("../models/Task");
+const User = require("../models/User");
 
 class TaskController {
   static async delete(req, res) {
-    const { id } = req.params;
-    const deleteTask = await Task.findByIdAndRemove(id);
-    res.status(201).json({ deleteTask });
+    const { userId, taskId } = req.params;
+
+    const user = await User.findById(userId).populate("tasks");
+    const filteredUser = user.tasks.filter(
+      (item) => item._id.toString() !== taskId
+    );
+
+    user.tasks = [];
+    user.tasks = filteredUser;
+    user.save();
+
+    try {
+      res.status(201).json({ message: "The task was deleted!" });
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
   }
   static async getOne(req, res) {
     try {
@@ -28,26 +42,39 @@ class TaskController {
     }
   }
   static async edit(req, res) {
-    try {
-      const { id } = req.params;
-      const { title, description, done, date, list } = req.body;
+    const { userId, taskId } = req.params;
+    const { title, description, done, date, list } = req.body;
 
-      const task = {
-        title,
-        description,
-        done,
-        date,
-        list,
-      };
-      const editedTask = await Task.findByIdAndUpdate(id, task);
+    const task = {
+      title,
+      description,
+      date,
+      list,
+    };
+
+    const user = await User.findById(userId).populate("tasks");
+    const filteredUser = user.tasks.filter(
+      (item) => item._id.toString() === taskId
+    );
+
+    const userTask = filteredUser[0];
+    userTask.title = task.title;
+    userTask.description = task.description;
+    userTask.list = task.list;
+    userTask.date = task.date;
+    await userTask.save();
+
+    try {
       res.status(201).json({
-        editedTask,
+        userTask,
       });
     } catch (error) {
       res.status(500).json({ message: error });
     }
   }
+
   static async create(req, res) {
+    const { id } = req.params;
     const { title, description, done, date, list } = req.body;
 
     if (!title) {
@@ -66,12 +93,23 @@ class TaskController {
       date,
       list,
     });
+
+    const userById = await User.findById(id);
+    userById.tasks.push(task);
+    await userById.save();
     try {
-      const newTask = await task.save();
       res.status(201).json({
-        message: "Task Created!",
-        newTask,
+        message: "The task was created!",
       });
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+  }
+  static async userByPost(req, res) {
+    const { id } = req.params;
+    const userByPost = await Task.findById(id).populate("user");
+    try {
+      res.status(201).send(userByPost);
     } catch (error) {
       res.status(500).json({ message: error });
     }

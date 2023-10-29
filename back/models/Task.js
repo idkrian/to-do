@@ -21,6 +21,10 @@ const Task = mongoose.model(
       list: {
         type: String,
       },
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
     },
     { timestamps: true }
   )

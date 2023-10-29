@@ -1,12 +1,24 @@
-const Auth = require("../models/Auth");
+const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-class AuthController {
+class UserController {
+  static async getAllUsers(req, res) {
+    const user = await User.find();
+
+    try {
+      res.status(201).json({
+        user,
+      });
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+  }
   static async getUser(req, res) {
     const { id } = req.params;
-    const user = await Auth.findById(id, "-password");
+    const user = await User.findById(id).populate("tasks");
+    // res.send(user.tasks);
     if (!user) {
       res.status(422).json({ message: "The user doesn't exists!" });
       return;
@@ -19,7 +31,16 @@ class AuthController {
       res.status(500).json({ message: error });
     }
   }
+  static async getTasksByUser(req, res) {
+    const { id } = req.params;
 
+    try {
+      const user = await User.findById(id).populate("tasks");
+      res.send(user.tasks);
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+  }
   static async create(req, res) {
     const { email, password, confirmPassword } = req.body;
 
@@ -35,7 +56,7 @@ class AuthController {
       res.status(422).json({ message: "The passwords needs to be similar!" });
       return;
     }
-    const userExists = await Auth.findOne({ email: email });
+    const userExists = await User.findOne({ email: email });
     if (userExists) {
       res.status(422).json({ message: "The email already exists" });
       return;
@@ -43,7 +64,7 @@ class AuthController {
     const salt = await bcrypt.genSalt(12);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const user = new Auth({
+    const user = new User({
       email,
       password: passwordHash,
     });
@@ -69,7 +90,7 @@ class AuthController {
       return;
     }
 
-    const user = await Auth.findOne({ email: email });
+    const user = await User.findOne({ email: email });
     if (!user) {
       res.status(422).json({ message: "The user doesn't exists!" });
       return;
@@ -99,4 +120,4 @@ class AuthController {
     }
   }
 }
-module.exports = AuthController;
+module.exports = UserController;

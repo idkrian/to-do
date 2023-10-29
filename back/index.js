@@ -9,9 +9,9 @@ app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
 //Routes
 const TaskRoutes = require("./routes/TaskRoutes");
-const AuthRoutes = require("./routes/AuthRoutes");
+const UserRoutes = require("./routes/UserRoutes");
 app.use("/tasks", TaskRoutes);
-app.use("/auth", AuthRoutes);
+app.use("/user", UserRoutes);
 
 //Port
 app.listen(5000);
