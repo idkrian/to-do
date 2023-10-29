@@ -5,6 +5,9 @@ import Today from "./components/pages/Today";
 import Upcoming from "./components/pages/Upcoming";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Toaster } from "./lib/ui/toaster";
+import Login from "./components/pages/Login";
+import { useState } from "react";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -18,14 +21,38 @@ const router = createBrowserRouter([
     path: "/list/:listName",
     element: <ListTasks />,
   },
+  {
+    path: "/login",
+    element: <Login />,
+  },
 ]);
 function App() {
+  const [logged, setLogged] = useState(false);
+  const [routeCount, setRouteCount] = useState(0);
+  console.log(routeCount);
+
+  const LoginPages = () => {
+    if (routeCount === 0) {
+      return <Login setRouteCount={setRouteCount} setLogged={setLogged} />;
+    } else {
+      return (
+        <>
+          <Menu logged={logged} />
+          <RouterProvider router={router} />
+          <Sidebar />
+          <Toaster />
+        </>
+      );
+    }
+  };
+
   return (
-    <div className="bg-[#fafafa] align-middle justify-center rounded-xl flex h-5/6 w-3/4 mx-auto">
-      <Menu />
+    <div className="bg-[#fafafa] align-middle justify-center rounded-xl flex h-[98%] w-[98%] mx-auto">
+      {LoginPages()}
+      {/* <Menu logged={logged} />
       <RouterProvider router={router} />
       <Sidebar />
-      <Toaster />
+      <Toaster /> */}
     </div>
   );
 }

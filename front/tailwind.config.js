@@ -14,6 +14,11 @@ export const theme = {
       "2xl": "1400px",
     },
   },
+  colors: {
+    gray: "#e2e2e2",
+    lightgray: "#ebebeb",
+    yellow: "#ffd43b",
+  },
   extend: {
     keyframes: {
       "accordion-down": {
