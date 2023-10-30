@@ -1,78 +1,15 @@
 import { useState } from "react";
+import SignIn from "../Login/SignIn";
+import SignUp from "../Login/SignUp";
 
 const Login = () => {
   const [pageCount, setPageCount] = useState(0);
 
-  const SignIn = () => {
-    return (
-      <>
-        <h1 className="text-4xl font-semibold ">Sign in</h1>
-        <div className="flex flex-col w-5/6">
-          <input
-            className="w-full h-10 rounded-lg p-4 bg-transparent border-[lightgray] border border-solid my-2"
-            type="text"
-            placeholder="Email"
-          />
-          <input
-            className="w-full h-10 rounded-lg p-4 bg-transparent border-[lightgray] border border-solid my-2"
-            type="text"
-            placeholder="Password"
-          />
-          <a href="/">
-            <button className="bg-yellow h-10 rounded-lg font-semibold mt-3 w-full">
-              Sign in
-            </button>
-          </a>
-        </div>
-        <p
-          className="font-semibold mt-2 cursor-pointer "
-          onClick={() => setPageCount(pageCount + 1)}
-        >
-          Don't have an account? Sign Up
-        </p>
-      </>
-    );
-  };
-  const SignUp = () => {
-    return (
-      <>
-        <h1 className="text-4xl font-semibold ">Sign Up</h1>
-        <div className="flex flex-col w-5/6 ">
-          <input
-            className="w-full h-10 rounded-lg p-4 bg-transparent border-[lightgray] border border-solid my-2"
-            type="text"
-            placeholder="Email"
-          />
-          <input
-            className="w-full h-10 rounded-lg p-4 bg-transparent border-[lightgray] border border-solid my-2"
-            type="text"
-            placeholder="Password"
-          />
-          <input
-            className="w-full h-10 rounded-lg p-4 bg-transparent border-[lightgray] border border-solid my-2"
-            type="text"
-            placeholder="Confirm Password"
-          />
-          <a href="/">
-            <button className="bg-yellow h-10 rounded-lg font-semibold mt-3 w-full">
-              Sign in
-            </button>
-          </a>
-        </div>
-        <p
-          className="font-semibold mt-2 cursor-pointer"
-          onClick={() => setPageCount(pageCount - 1)}
-        >
-          Already have an account? Sign In
-        </p>
-      </>
-    );
-  };
   const LoginPages = () => {
     if (pageCount === 0) {
-      return <SignIn />;
+      return <SignIn setPageCount={setPageCount} pageCount={pageCount} />;
     } else {
-      return <SignUp />;
+      return <SignUp setPageCount={setPageCount} pageCount={pageCount} />;
     }
   };
   return (

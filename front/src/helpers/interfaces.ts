@@ -6,3 +6,8 @@ export interface TaskProps {
   date: Date;
   list: string;
 }
+export interface UserProps {
+  email: string;
+  password: string;
+  confirmPassword?: string;
+}

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { TaskProps } from "./interfaces";
+import { TaskProps, UserProps } from "./interfaces";
 const baseURL = "http://localhost:5000";
 
 export const getAllTasks = async () => {
@@ -34,5 +34,29 @@ export const updateTask = async (id: string, data: TaskProps) => {
     return response;
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const createUser = async (data: UserProps) => {
+  try {
+    const response = await axios.post(`${baseURL}/user/register`, { ...data });
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const authenticateUser = async (data: UserProps) => {
+  try {
+    const response = await axios.post(`${baseURL}/user/login`, { ...data });
+    return response.data.token;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      return {
+        error: true,
+        data: e.response?.data,
+      };
+    } else {
+      console.error(e);
+    }
   }
 };

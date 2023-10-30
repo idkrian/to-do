@@ -6,32 +6,33 @@ import Upcoming from "./components/pages/Upcoming";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Toaster } from "./lib/ui/toaster";
 import Login from "./components/pages/Login";
+import { useState } from "react";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Today />,
-  },
-  {
-    path: "/upcoming",
-    element: <Upcoming />,
-  },
-  {
-    path: "/list/:listName",
-    element: <ListTasks />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-]);
 function App() {
-  const isLoginPage = window.location.pathname === "/login";
-  console.log(isLoginPage);
+  const isLoginPage = window.location.pathname === "/";
 
+  const router = createBrowserRouter([
+    {
+      path: "/today",
+      element: <Today />,
+    },
+    {
+      path: "/upcoming",
+      element: <Upcoming />,
+    },
+    {
+      path: "/list/:listName",
+      element: <ListTasks />,
+    },
+    {
+      path: "/",
+      element: <Login />,
+      index: true,
+    },
+  ]);
   return (
-    <div className="bg-[#fafafa] align-middle justify-center rounded-xl flex h-[98%] w-[98%] mx-auto">
-      {isLoginPage ? null : <Menu />}
+    <div className="bg-[#fafafa] align-middle justify-center rounded-xl flex h-full w-full mx-auto">
+      <Menu />
       <RouterProvider router={router} />
       <Sidebar />
       <Toaster />

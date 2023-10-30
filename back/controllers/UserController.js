@@ -92,7 +92,9 @@ class UserController {
 
     const user = await User.findOne({ email: email });
     if (!user) {
-      res.status(422).json({ message: "The user doesn't exists!" });
+      res
+        .status(422)
+        .json({ message: "Sorry, we couldn't find your account." });
       return;
     }
 
