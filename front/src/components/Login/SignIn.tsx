@@ -18,6 +18,7 @@ const SignIn = ({ pageCount, setPageCount }: Props) => {
   const handleForm = async (data: UserProps) => {
     try {
       const userToken = await authenticateUser(data);
+
       if (userToken?.error) {
         return toast({
           variant: "destructive",

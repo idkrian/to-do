@@ -3,39 +3,35 @@ import Menu from "./components/menus/Menu";
 import Sidebar from "./components/menus/Sidebar";
 import Today from "./components/pages/Today";
 import Upcoming from "./components/pages/Upcoming";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { Toaster } from "./lib/ui/toaster";
 import Login from "./components/pages/Login";
-import { useState } from "react";
 
 function App() {
-  const isLoginPage = window.location.pathname === "/";
-
-  const router = createBrowserRouter([
-    {
-      path: "/today",
-      element: <Today />,
-    },
-    {
-      path: "/upcoming",
-      element: <Upcoming />,
-    },
-    {
-      path: "/list/:listName",
-      element: <ListTasks />,
-    },
-    {
-      path: "/",
-      element: <Login />,
-      index: true,
-    },
-  ]);
+  const SidebarLayout = () => (
+    <>
+      <Menu />
+      <Outlet />
+    </>
+  );
   return (
     <div className="bg-[#fafafa] align-middle justify-center rounded-xl flex h-full w-full mx-auto">
-      <Menu />
+      <BrowserRouter>
+        <Routes>
+          <Route element={<SidebarLayout />}>
+            <Route path="/today" element={<Today />} />
+            <Route path="/list/:listName" element={<ListTasks />} />
+            <Route path="/upcoming" element={<Upcoming />} />
+          </Route>
+          <Route index element={<Login />} />
+        </Routes>
+        <Sidebar />
+        <Toaster />
+      </BrowserRouter>
+      {/* <Menu />
       <RouterProvider router={router} />
       <Sidebar />
-      <Toaster />
+      <Toaster /> */}
     </div>
   );
 }
