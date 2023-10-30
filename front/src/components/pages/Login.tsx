@@ -1,10 +1,6 @@
-import { SetStateAction } from "jotai";
-import { Dispatch, useState } from "react";
-interface Props {
-  setLogged?: Dispatch<SetStateAction<boolean>>;
-  setRouteCount?: Dispatch<SetStateAction<number>>;
-}
-const Login = ({ setLogged, setRouteCount }: Props) => {
+import { useState } from "react";
+
+const Login = () => {
   const [pageCount, setPageCount] = useState(0);
 
   const SignIn = () => {
@@ -22,15 +18,11 @@ const Login = ({ setLogged, setRouteCount }: Props) => {
             type="text"
             placeholder="Password"
           />
-          <button
-            className="bg-yellow h-10 rounded-lg font-semibold mt-3"
-            onClick={() => {
-              setRouteCount!(1);
-              setLogged!(true);
-            }}
-          >
-            Sign in
-          </button>
+          <a href="/">
+            <button className="bg-yellow h-10 rounded-lg font-semibold mt-3 w-full">
+              Sign in
+            </button>
+          </a>
         </div>
         <p
           className="font-semibold mt-2 cursor-pointer "
@@ -61,15 +53,11 @@ const Login = ({ setLogged, setRouteCount }: Props) => {
             type="text"
             placeholder="Confirm Password"
           />
-          <button
-            className="bg-yellow h-10 rounded-lg font-semibold mt-3"
-            onClick={() => {
-              setRouteCount!(1);
-              setLogged!(true);
-            }}
-          >
-            Sign in
-          </button>
+          <a href="/">
+            <button className="bg-yellow h-10 rounded-lg font-semibold mt-3 w-full">
+              Sign in
+            </button>
+          </a>
         </div>
         <p
           className="font-semibold mt-2 cursor-pointer"

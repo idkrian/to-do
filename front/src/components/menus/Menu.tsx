@@ -17,10 +17,7 @@ import { TaskProps } from "../../helpers/interfaces.js";
 import { format, isThisWeek } from "date-fns";
 import Cube from "../Atoms/Cube.js";
 
-interface Props {
-  logged: boolean;
-}
-const Menu = ({ logged }: Props) => {
+const Menu = () => {
   const [tasks, setTasks] = useState<TaskProps[]>([]);
   const today = format(new Date(), "dd/MM/yyyy");
   const todayTasks = tasks.filter(
@@ -55,9 +52,7 @@ const Menu = ({ logged }: Props) => {
   //   const randomValue = getRandomValue(randomOptions);
   //   return { label: item, color: randomValue };
   // });
-  if (!logged) {
-    return;
-  }
+
   return (
     <div className="bg-[#ebebeb] p-5 w-60 rounded-xl m-5">
       <h1 className="font-bold text-3xl">Menu</h1>
