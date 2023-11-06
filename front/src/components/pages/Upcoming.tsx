@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { addDays, format, isThisWeek } from "date-fns";
 import TaskContainer from "../Atoms/TaskContainer";
+import { getTasksbyId } from "../../helpers/api";
 interface TaskProps {
   _id: string;
   title: string;
@@ -23,13 +23,14 @@ const Upcoming = () => {
   const thisWeekTasks = tasks.filter((e) => isThisWeek(new Date(e.date)));
 
   const getAllTasks = async () => {
-    await axios
-      .get("http://localhost:5000/tasks")
-      .then((res) => setTasks(res.data.allTasks));
+    const userId = localStorage.getItem("userId");
+    const tasksData = await getTasksbyId(userId!);
+    setTasks(tasksData);
   };
   useEffect(() => {
     getAllTasks();
   }, []);
+  console.log(tasks);
 
   return (
     <div className="p-5 justify-between grow h-full">

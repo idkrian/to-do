@@ -11,9 +11,6 @@ app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 //Routes
 app.post("/user", async (req: any, res: any) => {
   const { email } = req.body;
-  const userData = {
-    email,
-  };
   try {
     const user = await prisma.user.create({
       data: {
@@ -40,13 +37,27 @@ app.get("/user/:id", async (req: any, res: any) => {
   const { id } = req.params;
   const user = await prisma.user.findUnique({
     where: {
-      id: Number(id),
+      id: id,
     },
     include: {
-      tasks: true, // All posts where authorId == 20
+      tasks: true,
     },
   });
   res.send(user);
+});
+app.get("/user/email/:email", async (req: any, res: any) => {
+  const { email } = req.params;
+
+  try {
+    const user = await prisma.user.findUniqueOrThrow({
+      where: {
+        email: email,
+      },
+    });
+    res.send(user);
+  } catch (error) {
+    res.send({ error: true, message: "This user doesnt exist!" });
+  }
 });
 app.post("/task", async (req: any, res: any) => {
   const { title, description, date, userId } = req.body;
@@ -61,6 +72,16 @@ app.post("/task", async (req: any, res: any) => {
   });
   res.send(user);
 });
+app.get("/task/:id", async (req: any, res: any) => {
+  const { id } = req.params;
+
+  const user = await prisma.task.findMany({
+    where: {
+      userId: id,
+    },
+  });
+  res.send(user);
+});
 app.put("/task/:id", async (req: any, res: any) => {
   const { id } = req.params;
   const { title, description, date, userId } = req.body;
@@ -72,7 +93,7 @@ app.put("/task/:id", async (req: any, res: any) => {
   };
   const user = await prisma.task.update({
     where: {
-      id: Number(id),
+      id: id,
     },
     data: task,
   });
@@ -82,7 +103,7 @@ app.delete("/task/:id", async (req: any, res: any) => {
   const { id } = req.params;
   const user = await prisma.task.delete({
     where: {
-      id: Number(id),
+      id: id,
     },
   });
   res.send(user);

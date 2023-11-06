@@ -1,7 +1,6 @@
 import { SetStateAction } from "jotai";
 import { Dispatch, useState } from "react";
-import { UserProps } from "../../helpers/interfaces";
-import { authenticateUser } from "../../helpers/api";
+import { login } from "../../helpers/api";
 import { toast } from "../../lib/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -11,21 +10,17 @@ interface Props {
 }
 const SignIn = ({ pageCount, setPageCount }: Props) => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const handleForm = async (data: UserProps) => {
+  const [email, setEmail] = useState("");
+  const handleForm = async (email: string) => {
+    const userId = await login(email);
     try {
-      const userToken = await authenticateUser(data);
-
-      if (userToken?.error) {
+      if (userId.error) {
         return toast({
           variant: "destructive",
-          title: userToken.data.message,
+          title: userId.message,
         });
       }
-      localStorage.setItem("token", userToken);
+      localStorage.setItem("userId", userId.id);
       navigate("/today");
     } catch (error) {
       console.log(error);
@@ -39,10 +34,10 @@ const SignIn = ({ pageCount, setPageCount }: Props) => {
           className="w-full h-10 rounded-lg p-4 bg-transparent border-[lightgray] border border-solid my-2"
           type="text"
           placeholder="Email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
-        <input
+        {/* <input
           className="w-full h-10 rounded-lg p-4 bg-transparent border-[lightgray] border border-solid my-2"
           type="text"
           placeholder="Password"
@@ -50,10 +45,10 @@ const SignIn = ({ pageCount, setPageCount }: Props) => {
           onChange={(e) =>
             setFormData({ ...formData, password: e.target.value })
           }
-        />
+        /> */}
         <button
           className="bg-yellow h-10 rounded-lg font-semibold mt-3 w-full"
-          onClick={() => handleForm(formData)}
+          onClick={() => handleForm(email)}
         >
           Sign in
         </button>

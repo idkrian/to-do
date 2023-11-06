@@ -8,12 +8,11 @@ import Checkbox from "./Checkbox";
 
 interface TaskItemProps {
   task: {
-    _id: string;
+    id?: string;
     title: string;
     description: string;
-    done?: boolean;
     date: Date;
-    list: string;
+    list?: string;
   };
 }
 const TaskItem = ({ task }: TaskItemProps) => {
@@ -28,9 +27,9 @@ const TaskItem = ({ task }: TaskItemProps) => {
         setSidebarData(task);
         setIsUpdade(true);
       }}
-      key={task._id}
+      key={task.id}
     >
-      <Checkbox label={task.title} key={task._id} />
+      <Checkbox label={task.title} key={task.id} />
     </div>
   );
 };

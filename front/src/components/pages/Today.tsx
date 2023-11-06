@@ -1,7 +1,7 @@
 import { FaPlus } from "react-icons/fa6";
 import { useAtom } from "jotai";
 import { sidebarOpenAtom } from "../storage/atoms.js";
-import { getAllTasks } from "../../helpers/api.js";
+import { getTasksbyId } from "../../helpers/api.js";
 import { useEffect, useState } from "react";
 import format from "date-fns/format";
 import { TaskProps } from "../../helpers/interfaces.js";
@@ -16,7 +16,8 @@ const Today = () => {
   );
 
   const getTasks = async () => {
-    const tasksData = await getAllTasks();
+    const userId = localStorage.getItem("userId");
+    const tasksData = await getTasksbyId(userId!);
     setTasks(tasksData);
   };
   useEffect(() => {
@@ -43,7 +44,7 @@ const Today = () => {
         </div>
         <div>
           {todayTasks.map((task) => (
-            <TaskItem task={task} key={task._id} />
+            <TaskItem task={task} key={task.id} />
           ))}
         </div>
       </div>

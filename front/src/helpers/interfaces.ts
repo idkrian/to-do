@@ -1,13 +1,13 @@
 export interface TaskProps {
-  _id: string;
+  id?: string;
   title: string;
   description: string;
-  done?: boolean;
   date: Date;
   list: string;
+  userId?: string;
 }
 export interface UserProps {
   email: string;
-  password: string;
+  password?: string;
   confirmPassword?: string;
 }

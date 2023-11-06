@@ -36,7 +36,7 @@ const AlertModal = ({ data, handleDeleteTask }: Props) => {
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
-              handleDeleteTask(data._id!);
+              handleDeleteTask(data.id!);
               toast({
                 variant: "destructive",
                 title: "The task was deleted!",

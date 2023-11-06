@@ -25,8 +25,8 @@ function App() {
           </Route>
           <Route index element={<Login />} />
         </Routes>
-        <Sidebar />
         <Toaster />
+        <Sidebar />
       </BrowserRouter>
       {/* <Menu />
       <RouterProvider router={router} />

@@ -25,7 +25,7 @@ const TaskContainer = ({ title, tasks, style }: TaskContainerProps) => {
         <p>Add new task</p>
       </div>
       {tasks.map((task) => (
-        <TaskItem task={task} key={task._id} />
+        <TaskItem task={task} key={task.id} />
       ))}
     </div>
   );

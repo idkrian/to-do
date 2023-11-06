@@ -15,7 +15,7 @@ import AlertModal from "../Atoms/AlertModal";
 const Sidebar = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
-    _id: "",
+    id: "",
     title: "",
     description: "",
     list: "",
@@ -31,10 +31,12 @@ const Sidebar = () => {
 
   const handleTask = async (e: FormEvent<HTMLFormElement>, data: TaskProps) => {
     e.preventDefault();
+    const userId = localStorage.getItem("userId");
+
     if (isUpdate) {
-      await updateTask(data._id, data);
+      await updateTask(data.id!, data);
     } else {
-      await createTask(data);
+      await createTask({ ...data, userId: userId! });
     }
     setSidebarOpen(!sidebarOpen);
   };
@@ -42,7 +44,7 @@ const Sidebar = () => {
   const closeSidebar = () => {
     setSidebarOpen(!sidebarOpen);
     setSidebarData({
-      _id: "",
+      id: "",
       title: "",
       description: "",
       list: "",
