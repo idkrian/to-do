@@ -27,8 +27,6 @@ const Menu = () => {
   const getTasks = async () => {
     const userId = localStorage.getItem("userId");
     const tasksData = await getTasksbyId(userId);
-    // console.log(tasksData);
-
     setTasks(tasksData);
   };
   useEffect(() => {
