@@ -9,14 +9,25 @@ import {
 import { MdLogout } from "react-icons/md";
 
 import SidebarItem from "./sidebar/SidebarItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import supabase from "../../db/supabase";
+import { Tables } from "../../db/database.types";
+type List = Tables<"lists">;
 const Sidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
-
+  const [lists, setLists] = useState<List[] | null>([]);
+  async function fetch() {
+    const { data: lists } = await supabase.from("lists").select();
+    setLists(lists);
+  }
+  useEffect(() => {
+    fetch();
+  }, []);
   return (
     <div
-      className={`flex flex-col rounded-xl gap-4 bg-lightGrey text-black transition-all ${
-        showSidebar ? "h-full w-full max-w-[20rem] p-6" : "w-fit p-2"
+      className={`flex flex-col rounded-xl gap-4 bg-lightGrey text-black ${
+        showSidebar ? "h-full w-full max-w-[20rem] p-6" : "w-fit h-fit p-2"
       }`}
     >
       <div className="flex justify-between items-center">
@@ -45,33 +56,35 @@ const Sidebar = () => {
           </div>
           <div className="flex flex-col gap-2 mt-4">
             <p className="text-xs font-bold">TASKS</p>
-            <SidebarItem
-              icon={<FaAngleDoubleRight />}
-              text="Upcoming"
-              number={12}
-            />
-            <SidebarItem icon={<FaTasks />} text="Today" number={5} />
+            <Link href="/upcoming">
+              <SidebarItem
+                icon={<FaAngleDoubleRight />}
+                text="Upcoming"
+                number={12}
+              />
+            </Link>
+            <Link href="/today">
+              <SidebarItem icon={<FaTasks />} text="Today" number={5} />
+            </Link>
             <SidebarItem icon={<FaRegCalendarAlt />} text="Calendar" />
-            <SidebarItem icon={<FaRegStickyNote />} text="Sticky Wall" />
+            <Link href="/sticky-wall">
+              <SidebarItem icon={<FaRegStickyNote />} text="Sticky Wall" />
+            </Link>
           </div>
           <div className="h-0.5 w-full bg-mediumGrey" />
           <div className="flex flex-col gap-2 mt-4">
             <p className="text-xs font-bold">LISTS</p>
-            <SidebarItem
-              icon={<div className="size-5 rounded-md bg-green-500" />}
-              text="Personal"
-              number={12}
-            />
-            <SidebarItem
-              icon={<div className="size-5 rounded-md bg-purple-500" />}
-              text="Work"
-              number={8}
-            />
-            <SidebarItem
-              icon={<div className="size-5 rounded-md bg-orange-500" />}
-              text="Home"
-              number={3}
-            />
+            {lists &&
+              lists.map((list) => (
+                <Link href={`/list/${list.id}`} key={list.id}>
+                  <SidebarItem
+                    icon={<div className="size-5 rounded-md bg-green-500" />}
+                    text={list.name}
+                    number={12}
+                    key={list.id}
+                  />
+                </Link>
+              ))}
           </div>
           <div className="mt-auto flex items-center my-4 gap-2 cursor-pointer group">
             <MdLogout className="size-5 text-darkGrey cursor-pointer" />

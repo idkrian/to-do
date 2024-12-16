@@ -1,7 +1,12 @@
 import AddTaskButton from "@/components/generics/AddTaskButton";
 import TaskInput from "@/components/generics/TaskInput";
+import { SetTitleProps } from "@/helpers/interfaces";
+import { useEffect } from "react";
 
-const Upcoming = () => {
+const Upcoming = ({ setTitle }: SetTitleProps) => {
+  useEffect(() => {
+    setTitle("Upcoming");
+  }, [setTitle]);
   return (
     <div className="flex flex-col gap-4 h-full">
       <div className="flex flex-col gap-4 border px-6 pt-4 rounded-lg h-full w-full">
