@@ -1,17 +1,24 @@
 import AddTaskButton from "@/components/generics/AddTaskButton";
 import TaskInput from "@/components/generics/TaskInput";
 import { useEffect, useState } from "react";
-import supabase from "../../db/supabase";
 import { Tables } from "../../db/database.types";
 import { SetTitleProps } from "@/helpers/interfaces";
+import { getAllTasksWithList } from "@/api/task_lists";
 
-type Task = Tables<"tasks">;
+type Task = Tables<"tasks"> & {
+  list: { name: string | undefined; id: number | undefined };
+};
 
 const Today = ({ setTitle }: SetTitleProps) => {
   const [tasks, setTasks] = useState<Task[] | null>([]);
   async function fetch() {
-    const { data: tasks } = await supabase.from("tasks").select();
-    setTasks(tasks);
+    try {
+      const tasks = await getAllTasksWithList();
+
+      setTasks(tasks.filter((task) => task !== null) as Task[]);
+    } catch (error) {
+      console.log(error);
+    }
   }
   useEffect(() => {
     setTitle("Today");
@@ -22,9 +29,7 @@ const Today = ({ setTitle }: SetTitleProps) => {
     <div>
       <AddTaskButton />
       {tasks != null &&
-        tasks!.map((task) => (
-          <TaskInput name={task.name} size="md" key={task.id} />
-        ))}
+        tasks!.map((task) => <TaskInput task={task} size="md" key={task.id} />)}
     </div>
   );
 };

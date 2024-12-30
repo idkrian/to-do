@@ -10,25 +10,33 @@ import { DatePicker } from "./ui/date-picker";
 import AddTaskButton from "./generics/AddTaskButton";
 import TaskInput from "./generics/TaskInput";
 import { AppContext } from "@/context/context";
-import { useContext, useState } from "react";
-import supabase from "../../db/supabase";
+import { useContext, useEffect, useState } from "react";
+import { Tables } from "../../db/database.types";
+import { getAllLists } from "@/api/lists";
 
 const TaskMenu = () => {
-  type Task = {
-    name: string;
-    description: string;
-    created_at: string;
-  };
-  const [formData, setFormData] = useState<Task>({
-    name: "",
-    description: "",
-    created_at: new Date().toISOString(),
-  });
-  const { showTaskMenu, setShowTaskMenu } = useContext(AppContext);
+  type List = Tables<"lists">;
+  const [lists, setLists] = useState<List[]>();
+  const [date, setDate] = useState<Date>();
+
+  const { showTaskMenu, setShowTaskMenu, selectedTask, setSelectedTask } =
+    useContext(AppContext);
 
   const addTask = async () => {
-    await supabase.from("tasks").insert(formData);
+    // await supabase.from("tasks").insert(formData);
   };
+  useEffect(() => {
+    const fetchLists = async () => {
+      try {
+        const lists = await getAllLists();
+        setLists(lists!);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchLists();
+  }, []);
+
   return (
     <div
       className={`transition-all flex-col gap-3 text-lightBlack bg-lightGrey rounded-xl p-6 ${
@@ -47,40 +55,54 @@ const TaskMenu = () => {
         type="text"
         className="bg-lightGrey font-semibold outline-none text-darkGrey p-2 border rounded-lg h-10 w-full border-[#dfdfdf]"
         placeholder="Title"
-        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        value={selectedTask?.name || ""}
+        onChange={(e) =>
+          setSelectedTask({ ...selectedTask!, name: e.target.value })
+        }
       />
       <div className="bg-transparent">
         <input
           type="text"
           className="bg-transparent font-semibold outline-none text-darkGrey p-2 border rounded-lg h-36 w-full border-[#dfdfdf]"
           placeholder="Description"
+          value={selectedTask?.description || ""}
           onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
+            setSelectedTask({ ...selectedTask!, description: e.target.value })
           }
         />
       </div>
       <div className="flex items-center justify-between w-[70%]">
         <p>List</p>
-        <Select>
+        <Select
+          value={selectedTask?.list?.name || ""}
+          onValueChange={(value) =>
+            setSelectedTask({
+              ...selectedTask!,
+              list: { id: selectedTask?.list?.id, name: value },
+            })
+          }
+        >
           <SelectTrigger className="w-24">
             <SelectValue placeholder="Theme" />
           </SelectTrigger>
           <SelectContent className="outline-none">
-            <SelectItem value="light">Light</SelectItem>
-            <SelectItem value="dark">Dark</SelectItem>
-            <SelectItem value="system">System</SelectItem>
+            {lists?.map((list) => (
+              <SelectItem key={list.id} value={list.name}>
+                {list.name}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
       <div className="flex items-center justify-between w-[70%]">
         <p>Due date</p>
-        <DatePicker />
+        <DatePicker setDate={setDate} date={date} selectedTask={selectedTask} />
       </div>
 
       <div className="flex flex-col gap-4 mt-4">
         <p className="text-2xl font-semibold">Subtask:</p>
         <AddTaskButton />
-        <TaskInput name="Escovar Cachorro" size="sm" />
+        <TaskInput task={selectedTask!} size="sm" />
       </div>
 
       <div className="flex justify-between mt-auto gap-4">

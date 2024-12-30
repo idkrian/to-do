@@ -1,9 +1,10 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { Tables } from "../../../db/database.types";
-import supabase from "../../../db/supabase";
 import TaskInput from "@/components/generics/TaskInput";
 import { SetTitleProps } from "@/helpers/interfaces";
+import { getListById } from "@/api/lists";
+import { getTaskListByListId } from "@/api/task_lists";
 
 type Task = Tables<"tasks">;
 
@@ -14,29 +15,31 @@ const List = ({ setTitle }: SetTitleProps) => {
   useEffect(() => {
     async function fetch() {
       const listId = router.query.id!;
-      const { data: taskLists } = await supabase
-        .from("task_lists")
-        .select("tasks(*), lists(name)")
-        .eq("list_id", listId);
+      const taskLists = await getTaskListByListId(listId);
+      const list = await getListById(listId);
 
-      const tasksResult = {
-        listName: taskLists![0].lists!.name,
-        tasks: taskLists!.map((taskList) => taskList.tasks),
-      };
-      setTitle(tasksResult.listName);
-      setTasks(tasksResult.tasks?.filter((task) => task !== null) as Task[]);
+      setTitle(list![0].name);
+      setTasks(
+        taskLists!
+          .filter((taskList) => taskList.tasks !== null)
+          .map((taskList) => taskList.tasks)
+          .filter((task) => task !== null) as Task[]
+      );
     }
     if (router.query.id) {
       fetch();
     }
-  }, [router.query.id]);
+  }, [router.query.id, setTitle]);
 
   return (
     <div>
-      {tasks != null &&
-        tasks!.map((task: Task) => (
-          <TaskInput name={task.name} size="md" key={task.id} />
-        ))}
+      {tasks.length > 0 ? (
+        tasks.map((task: Task) => (
+          <TaskInput task={task} size="md" key={task.id} />
+        ))
+      ) : (
+        <div>You dont have any task in this list</div>
+      )}
     </div>
   );
 };

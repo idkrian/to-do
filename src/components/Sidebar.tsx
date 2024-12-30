@@ -14,13 +14,39 @@ import Link from "next/link";
 import supabase from "../../db/supabase";
 import { Tables } from "../../db/database.types";
 type List = Tables<"lists">;
+type TaskList = {
+  tasks: {
+    created_at: string;
+    description: string | null;
+    due_date: string | null;
+    id: number;
+    name: string;
+    subtask: number | null;
+  } | null;
+  lists: { created_at: string; id: number; name: string } | null;
+};
 const Sidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   const [lists, setLists] = useState<List[] | null>([]);
+  const [taskLists, setTaskLists] = useState<TaskList[] | null>([]);
   async function fetch() {
     const { data: lists } = await supabase.from("lists").select();
     setLists(lists);
+
+    const { data: taskLists } = await supabase
+      .from("task_lists")
+      .select("tasks(*), lists(*)");
+
+    setTaskLists(taskLists);
   }
+
+  const countSidebarItemsValue = (taskId: number) => {
+    const lists = taskLists?.filter(
+      (taskList) => taskList.lists?.id === taskId
+    );
+
+    return lists?.length;
+  };
   useEffect(() => {
     fetch();
   }, []);
@@ -80,7 +106,7 @@ const Sidebar = () => {
                   <SidebarItem
                     icon={<div className="size-5 rounded-md bg-green-500" />}
                     text={list.name}
-                    number={12}
+                    number={countSidebarItemsValue(list.id)}
                     key={list.id}
                   />
                 </Link>

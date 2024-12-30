@@ -14,7 +14,7 @@ const SidebarItem = ({ icon, text, number }: SidebarItemProps) => {
           {text}
         </p>
       </div>
-      {number && (
+      {number !== undefined && (
         <p className="group-hover:bg-lightGrey font-semibold text-sm flex items-center justify-center rounded-sm bg-mediumGrey w-8 h-full">
           {number}
         </p>

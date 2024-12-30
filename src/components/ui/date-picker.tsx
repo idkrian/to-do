@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -10,9 +9,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Tables } from "../../../db/database.types";
 
-export function DatePicker() {
-  const [date, setDate] = React.useState<Date>();
+type Task = Tables<"tasks"> & {
+  list?: { name: string | undefined; id: number | undefined };
+};
+type DatePickerProps = {
+  date: Date | undefined;
+  selectedTask: Task | null;
+  setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+};
+
+export function DatePicker({ date, setDate, selectedTask }: DatePickerProps) {
+  // const [date, setDate] = React.useState<Date>();
 
   return (
     <Popover>
@@ -24,7 +33,11 @@ export function DatePicker() {
             !date && "text-muted-foreground"
           )}
         >
-          {date ? format(date, "dd/MM/yyyy") : format(new Date(), "dd/MM/yyyy")}
+          {date
+            ? format(date, "dd/MM/yyyy")
+            : selectedTask && selectedTask.due_date
+            ? format(new Date(selectedTask.due_date), "dd/MM/yyyy")
+            : format(new Date(), "dd/MM/yyyy")}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

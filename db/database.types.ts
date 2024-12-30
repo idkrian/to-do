@@ -39,19 +39,37 @@ export type Database = {
           created_at: string;
           id: number;
           name: string;
-          task: number | null;
         };
         Insert: {
           created_at?: string;
           id?: number;
           name: string;
-          task?: number | null;
         };
         Update: {
           created_at?: string;
           id?: number;
           name?: string;
-          task?: number | null;
+        };
+        Relationships: [];
+      };
+      stickers: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          id: number;
+          title: string;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          id?: number;
+          title: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          id?: number;
+          title?: string;
         };
         Relationships: [];
       };
@@ -131,7 +149,15 @@ export type Database = {
           name?: string;
           subtask?: number | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "tasks_subtask_fkey";
+            columns: ["subtask"];
+            isOneToOne: false;
+            referencedRelation: "subtasks";
+            referencedColumns: ["id"];
+          }
+        ];
       };
     };
     Views: {
